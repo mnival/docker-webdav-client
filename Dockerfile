@@ -19,7 +19,8 @@ ENV WEBDRIVE_MOUNT=/mnt/webdrive
 
 RUN set -ex; \
   apk --no-cache add ca-certificates davfs2 tini; \
-  printf "user_allow_other\n" >> /etc/fuse.conf
+  printf "user_allow_other\n" >> /etc/fuse.conf; \
+  printf "ask_auth 0\n"
 
 COPY *.sh /usr/local/bin/
 
