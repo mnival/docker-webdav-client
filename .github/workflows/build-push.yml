@@ -5,7 +5,7 @@ on:
 
   push:
     branches:
-      - main
+      - test
     paths-ignore:
       - '.github/workflows/**'
       - 'README.md'
