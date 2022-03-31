@@ -26,15 +26,16 @@ unset WEBDRIVE_PASSWORD
 # Add davfs2 options out of all the environment variables starting with DAVFS2_
 # at the end of the configuration file. Nothing is done to check that these are
 # valid davfs2 options, use at your own risk.
+# Remove previous Custom configuration
+sed -i '/# CUSTOM/d' /etc/davfs2/davfs2.conf
 if [ -n "$(env | grep "DAVFS2_")" ]; then
-    echo "" >> /etc/davfs2/davfs2.conf
-    echo "[$DEST]" >> /etc/davfs2/davfs2.conf
+    echo "[$DEST] # CUSTOM" >> /etc/davfs2/davfs2.conf
     for VAR in $(env); do
         if [ -n "$(echo "$VAR" | grep -E '^DAVFS2_')" ]; then
             OPT_NAME=$(echo "$VAR" | sed -r "s/DAVFS2_([^=]*)=.*/\1/g" | tr '[:upper:]' '[:lower:]')
             VAR_FULL_NAME=$(echo "$VAR" | sed -r "s/([^=]*)=.*/\1/g")
             VAL=$(eval echo \$$VAR_FULL_NAME)
-            echo "$OPT_NAME $VAL" >> /etc/davfs2/davfs2.conf
+            echo "$OPT_NAME $VAL # CUSTOM" >> /etc/davfs2/davfs2.conf
         fi
     done
 fi
