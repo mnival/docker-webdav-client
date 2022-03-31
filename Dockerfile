@@ -20,7 +20,9 @@ ENV WEBDRIVE_MOUNT=/mnt/webdrive
 # DAVFS2_ASK_AUTH=0 will set the davfs2 configuration option ask_auth to 0 for
 # that share. See the manual for the list of available options.
 
-RUN apk --no-cache add ca-certificates davfs2 tini
+RUN set -ex; \
+  apk --no-cache add ca-certificates davfs2 tini; \
+  printf "user_allow_other\n" >> /etc/fuse.conf
 
 COPY *.sh /usr/local/bin/
 
