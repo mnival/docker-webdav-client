@@ -44,10 +44,24 @@ if [ ! -d $DEST ]; then
     mkdir -p $DEST
 fi
 
-# Deal with ownership
-if [ $OWNER -gt 0 ]; then
-    adduser webdrive -u $OWNER -D -G users
-    chown webdrive $DEST
+# Backwards compatibility
+if [ ! -z "${OWNER}" ]; then
+  UID="${OWNER}"
+fi
+
+# Default value for UID et GID
+UID=${UID:-0}
+GID=${GID:-100}
+
+# Check if user and group exist
+egrep -q "x:${GID}:" /etc/group
+if [ $? -ne 0 ]; then
+  addgroup -g ${GID} -S webdav
+fi
+
+egrep -q "x:${UID}:" /etc/passwd
+if [ $? -ne 0 ]; then
+  adduser -u ${UID} -S -D -H -G webdav webdav
 fi
 
 # Remove previous pid if stop is not correct
@@ -56,7 +70,7 @@ fi
 # Mount and verify that something is present. davfs2 always creates a lost+found
 # sub-directory, so we can use the presence of some file/dir as a marker to
 # detect that mounting was a success. Execute the command on success.
-mount -t davfs $WEBDRIVE_URL $DEST -o uid=$OWNER,gid=users,dir_mode=755,file_mode=755
+mount -t davfs $WEBDRIVE_URL $DEST -o uid=${UID},gid=${GID},dir_mode=755,file_mode=755
 if [ -n "$(ls -1A $DEST)" ]; then
     echo "Mounted $WEBDRIVE_URL onto $DEST"
     . trap.sh
