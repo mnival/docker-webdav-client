@@ -56,7 +56,8 @@ fi
 mount -t davfs $WEBDRIVE_URL $DEST -o uid=$OWNER,gid=users,dir_mode=755,file_mode=755
 if [ -n "$(ls -1A $DEST)" ]; then
     echo "Mounted $WEBDRIVE_URL onto $DEST"
-    exec "$@"
+    . trap.sh
+    tail -f /dev/null
 else
     echo "Nothing found in $DEST, giving up!"
 fi

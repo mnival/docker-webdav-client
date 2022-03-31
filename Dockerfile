@@ -32,4 +32,4 @@ VOLUME [ "/mnt/webdrive" ]
 # Listing the files will keep the share active and avoid that the remote server
 # closes the connection.
 ENTRYPOINT [ "tini", "-g", "--", "/usr/local/bin/docker-entrypoint.sh" ]
-CMD [ "ls.sh" ]
+HEALTHCHECK CMD health.sh
