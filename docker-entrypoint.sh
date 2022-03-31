@@ -50,6 +50,9 @@ if [ $OWNER -gt 0 ]; then
     chown webdrive $DEST
 fi
 
+# Remove previous pid if stop is not correct
+[ -n "$(ls -1 /var/run/mount.davfs/*.pid 2>/dev/null)" ] && rm /var/run/mount.davfs/*.pid
+
 # Mount and verify that something is present. davfs2 always creates a lost+found
 # sub-directory, so we can use the presence of some file/dir as a marker to
 # detect that mounting was a success. Execute the command on success.
