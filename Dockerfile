@@ -24,9 +24,6 @@ RUN apk --no-cache add ca-certificates davfs2 tini
 
 COPY *.sh /usr/local/bin/
 
-# Following should match the WEBDRIVE_MOUNT environment variable.
-VOLUME [ "/mnt/webdrive" ]
-
 # The default is to perform all system-level mounting as part of the entrypoint
 # to then have a command that will keep listing the files under the main share.
 # Listing the files will keep the share active and avoid that the remote server
